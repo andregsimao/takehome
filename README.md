@@ -22,13 +22,12 @@ java -jar build/libs/takehome-{version}.jar
 ./gradlew test
 ```
 
-* build OCI image
-  Spring Boot added support for buildpacks in version 2.3, so issue the following command in order to build an image ready to run:
+* build OCI image  
 ```bash
-./gradlew bootBuildImage
+docker build -t takehome .
 ```
 
 * run the image inside as a container
 ```bash
-docker run -d -p 8080:8080 takehome:{version}
+docker run -d -p 8080:8080 takehome
 ```
