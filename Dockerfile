@@ -21,9 +21,16 @@ ENTRYPOINT ["sh", "init.sh"]
 
 # -----------------------------------------------------------------------------
 FROM eclipse-temurin:17-jdk-alpine
-VOLUME /tmp
-ENV APP_DIR /app
-WORKDIR $APP_DIR
 
-COPY build/libs/*.jar app.jar
-ENTRYPOINT ["java","-jar","/app/app.jar"]
+RUN apk add --no-cache libc6-compat gcompat
+
+WORKDIR /deployments
+
+COPY --from=builder /app/init.sh /deployments
+COPY --from=builder /app/build/libs/*.jar /deployments/
+COPY --from=builder /app/build/libs/ /deployments/libs/
+COPY --from=builder /app/build/ /deployments/
+
+EXPOSE 8080
+
+ENTRYPOINT ["sh", "init.sh"]
