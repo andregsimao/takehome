@@ -1,0 +1,10 @@
+.*
+*.iml
+gradle
+src
+build/*
+
+!build/docker
+!build/*-runner
+!build/*-runner.jar
+!build/lib/*
