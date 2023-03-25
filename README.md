@@ -17,8 +17,6 @@ API to retrieve information about countries' geography.
 java -jar build/libs/takehome-{version}.jar
 ```
 
-
-
 * run tests
 ```bash
 ./gradlew test
