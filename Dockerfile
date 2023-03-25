@@ -17,7 +17,7 @@ RUN mkdir /tmp/cache
 COPY --from=dependencies-builder /tmp/cache /tmp/cache
 COPY . $APP_DIR
 RUN gradle assemble -g /tmp/cache --no-daemon
-ENTRYPOINT ["sh", "init.sh"]
+ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS} -jar takehome-*.jar"]
 
 # -----------------------------------------------------------------------------
 FROM eclipse-temurin:17-jdk-alpine
@@ -26,11 +26,10 @@ RUN apk add --no-cache libc6-compat gcompat
 
 WORKDIR /deployments
 
-COPY --from=builder /app/init.sh /deployments
 COPY --from=builder /app/build/libs/*.jar /deployments/
 COPY --from=builder /app/build/libs/ /deployments/libs/
-COPY --from=builder /app/build/ /deployments/
+COPY --from=builder /app/build/tmp/ /deployments/tmp/
 
 EXPOSE 8080
 
-ENTRYPOINT ["sh", "init.sh"]
+ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS} -jar takehome-*.jar"]
