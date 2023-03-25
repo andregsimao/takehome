@@ -24,7 +24,7 @@ java -jar build/libs/takehome-{version}.jar
 
 * build OCI image  
 ```bash
-docker build -t takehome .
+docker build --no-cache=true -t takehome .
 ```
 
 * run the image inside as a container

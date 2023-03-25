@@ -6,4 +6,4 @@ src
 !build/docker
 !build/*-runner
 !build/*-runner.jar
-!build/lib/*
+!build/libs/*
