@@ -1,0 +1,10 @@
+.*
+*.iml
+gradle
+# exclude build binaries
+build/*
+# except files for docker
+!build/docker
+!build/*-runner
+!build/*-runner.jar
+!build/libs/*
