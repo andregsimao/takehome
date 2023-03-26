@@ -42,4 +42,16 @@ public class CountriesResponse {
     public String getMessage() {
         return message;
     }
+
+    @Override
+    public String toString() {
+        String inputConcatenated = String.join(",", countriesInput);
+        String outputConcatenated = String.join(",", countriesOutput);
+
+        return "CountriesResponse(" +
+            "message=" + message + ", " +
+            "countriesInput=" + inputConcatenated + ", " +
+            "countriesOutput=" + outputConcatenated + " " +
+            ")";
+    }
 }

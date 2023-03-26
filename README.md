@@ -50,7 +50,8 @@ the response can be acquired quicker, the resources used are lower (cpu and memo
 
 # Limitations
 The pre-processing part does not guarantee that the response is always up-to-date with the most recent continent and country divisions. 
-For improving that, this API could have scheduled or manual updates of the pre-processing step. It would reduce the possibility of outdated data. 
+For reducing the possibility of outdated data, this API could reduce the refresh time of the pre-processing step or adding a manual refreshing feature. 
+The refresh was configured to be performed each 15 days.
 
 # Build & Run 
 
