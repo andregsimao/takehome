@@ -50,3 +50,7 @@ jar {
 		)
 	}
 }
+
+springBoot {
+	mainClass = 'com.example.takehome.TakehomeApplication'
+}
