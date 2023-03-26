@@ -1,8 +1,9 @@
 .*
 *.iml
 gradle
-src
-
+# exclude build binaries
+build/*
+# except files for docker
 !build/docker
 !build/*-runner
 !build/*-runner.jar
