@@ -1,9 +1,0 @@
-.*
-*.iml
-gradle
-src
-
-!build/docker
-!build/*-runner
-!build/*-runner.jar
-!build/libs/*
