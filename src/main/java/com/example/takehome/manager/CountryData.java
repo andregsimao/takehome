@@ -7,11 +7,11 @@ import java.util.*;
 
 public class CountryData {
 
-    private Map<String, List<String>> mapCountriesInContinent = new HashMap<>();
+    private Map<String, Set<String>> mapCountriesInContinent = new HashMap<>();
     private Map<String, String> mapContinentOfCountryCode = new HashMap<>();
     private Map<String, String> mapCodeFromCountryName = new HashMap<>();
 
-    public Set<String> getContinentsInCountries(Set<String> countriesCode) throws ApplicationException {
+    public Set<String> getContinentsInCountries(Set<String> countriesCode) {
         Set<String> continentsSet = new HashSet<>();
         for(String countryCode: countriesCode) {
             String continent = mapContinentOfCountryCode.get(countryCode);
@@ -20,11 +20,17 @@ public class CountryData {
         return continentsSet;
     }
 
-    public List<String> getCountriesInSameContinents(
+    public Set<String> getCountriesInSameContinents(
         Set<String> continentsCodes,
         Set<String> countriesCode
     ) {
-
+        Set<String> countriesInSameContinent = new HashSet<>();
+        for(String continentCode: continentsCodes) {
+            Set<String> countriesInContinent = mapCountriesInContinent.get(continentCode);
+            countriesInSameContinent.addAll(countriesInContinent);
+        }
+        countriesInSameContinent.removeAll(countriesCode);
+        return countriesInSameContinent;
     }
 
     public void checkIfCountriesDataIsLoaded() throws ApplicationException {
@@ -34,13 +40,17 @@ public class CountryData {
         }
     }
 
+    public boolean containsCountryCode(String countryCode) {
+        return mapCodeFromCountryName.containsKey(countryCode);
+    }
+
+    public String getCountryCodeFromCountryName(String countryName) {
+        return mapCodeFromCountryName.get(countryName);
+    }
+
     boolean isCountriesDataLoaded() {
         return !mapCountriesInContinent.isEmpty()
             && !mapContinentOfCountryCode.isEmpty()
             && !mapCodeFromCountryName.isEmpty();
-    }
-
-    private String getCountryCodeFromCountryName(String countryName) {
-        return mapCodeFromCountryName.get(countryName);
     }
 }

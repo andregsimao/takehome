@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @RestController
@@ -31,7 +32,7 @@ public class CountryController {
     public ResponseEntity<CountriesResponse> getCountriesInSameContinent(@RequestBody List<String> inputCountries) {
         try {
             log.info("[CountryController:getCountriesInSameContinent] Receiving request for input countries: " + inputCountries);
-            List<String> countriesInSameContinent = countryService.getCountriesInSameContinent(inputCountries);
+            Set<String> countriesInSameContinent = countryService.getCountriesInSameContinent(inputCountries);
             CountriesResponse countriesInSameContinentResponse = CountriesResponse
                 .buildCountriesListResponse(inputCountries, countriesInSameContinent);
             log.info("[CountryController:getCountriesInSameContinent] Success in getting output countries: " + countriesInSameContinentResponse);
@@ -51,11 +52,10 @@ public class CountryController {
     }
 
     private HttpStatus getHttpStatusFromException(ErrorType errorType) {
-        switch (errorType) {
-            case COUNTRY_DATA_NOT_LOADED:
-                return HttpStatus.INTERNAL_SERVER_ERROR;
-            default:
-                return HttpStatus.BAD_REQUEST;
+        if(errorType == ErrorType.COUNTRY_DATA_NOT_LOADED) {
+            return HttpStatus.INTERNAL_SERVER_ERROR;
+        } else {
+            return HttpStatus.BAD_REQUEST;
         }
     }
 }
