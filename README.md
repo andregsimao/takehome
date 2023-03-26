@@ -11,7 +11,7 @@ API to retrieve information about countries' geography.
 ./gradlew bootRun
 ```
 
-* build and execute jar locally with JDK 17
+* build and execute jar with JDK 17
 ```bash
 ./gradlew build
 java -jar build/libs/takehome-{version}.jar
