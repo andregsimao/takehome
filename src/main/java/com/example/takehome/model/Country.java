@@ -15,14 +15,12 @@ public class Country {
     public Continent getContinent() {
         return continent;
     }
-
     public void setCode(String code) {
         this.code = code;
     }
     public void setName(String name) {
         this.name = name;
     }
-
     public void setContinent(Continent continent) {
         this.continent = continent;
     }

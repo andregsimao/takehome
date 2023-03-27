@@ -58,7 +58,7 @@ public class RequestThrottleFilter implements Filter {
         }
         Integer requests = requestCountsPerIpAddress.get(clientIpAddress);
         int maxRequestsPerSecound = isNotAuthenticated ?
-                MAX_REQUESTS_PER_SECOND_UNAUTHENTICATED : MAX_REQUESTS_PER_SECOND_AUTHENTICATED;
+            MAX_REQUESTS_PER_SECOND_UNAUTHENTICATED : MAX_REQUESTS_PER_SECOND_AUTHENTICATED;
         if(requests == null) {
             requests = 0;
         } else if (requests > maxRequestsPerSecound) {
