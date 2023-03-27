@@ -4,6 +4,7 @@ import com.example.takehome.exception.ApplicationException;
 import com.example.takehome.exception.ErrorType;
 import com.example.takehome.manager.CountryData;
 import com.example.takehome.model.CountryCodeAndName;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Slf4j
 @Service
 public class CountryService {
 
@@ -42,11 +44,19 @@ public class CountryService {
         if(countryData.containsCountryCode(inputCountryUpperCase)) {
             return inputCountryUpperCase;
         }
+        log.info(
+            "[CountryService:getCountryCode] Country input " + inputCountry +
+                " is not the country code, trying to find country by name: "
+        );
         String countryCode = countryData.getCountryCodeFromCountryName(inputCountryUpperCase);
         if(countryCode == null) {
             String errorMessage = "Country " + inputCountry + " is not a valid input";
             throw new ApplicationException(ErrorType.INVALID_COUNTRY_INPUT, errorMessage);
         }
+        log.info(
+            "[CountryService:getCountryCode] Country code " + countryCode + " found from input " + inputCountry +
+                " is not the country code, trying to find country by name: "
+        );
         return countryCode;
     }
 }
