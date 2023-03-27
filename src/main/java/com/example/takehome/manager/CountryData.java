@@ -42,7 +42,7 @@ public class CountryData {
     }
 
     public void checkIfCountriesDataIsLoaded() throws ApplicationException {
-        if(!isCountriesDataLoaded()) {
+        if(isCountriesDataNotLoaded()) {
             String errorMessage = "The countries data is not loaded. Try again later.";
             throw new ApplicationException(ErrorType.COUNTRY_DATA_NOT_LOADED, errorMessage);
         }
@@ -56,20 +56,22 @@ public class CountryData {
         return mapCodeFromCountryName.get(countryName);
     }
 
-    public void setCountriesData(Map<ContinentEnum, List<Country>> countriesInContinent) {
+    public void setCountriesData(Map<ContinentEnum, List<Country>> countriesInContinents) {
         isUpdatingData = true;
         resetCountriesData();
-        for(Map.Entry<ContinentEnum, List<Country>> entrySet: countriesInContinent.entrySet()) {
+        for(Map.Entry<ContinentEnum, List<Country>> entrySet: countriesInContinents.entrySet()) {
             setCountriesInContinent(entrySet.getKey(), entrySet.getValue());
         }
         isUpdatingData = false;
     }
 
-    boolean isCountriesDataLoaded() {
-        return !mapCountriesFromContinent.isEmpty()
-            && !mapContinentFromCountryCode.isEmpty()
-            && !mapCodeFromCountryName.isEmpty()
-            && !isUpdatingData;
+    boolean isCountriesDataNotLoaded() {
+        return (
+            mapCountriesFromContinent.isEmpty() ||
+            mapContinentFromCountryCode.isEmpty() ||
+            mapCodeFromCountryName.isEmpty() ||
+            isUpdatingData
+        );
     }
 
     private void resetCountriesData() {

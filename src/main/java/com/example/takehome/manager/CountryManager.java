@@ -51,7 +51,7 @@ public class CountryManager {
     @Scheduled(fixedRate = numberOfMinutesToCheckData * 60 * 1000, initialDelay = 60000)
     public void refreshCountriesDataIfMissing() {
         log.info("[CountryManager:refreshCountriesDataIfMissing] Checking if countries data is not loaded");
-        if(!countryData.isCountriesDataLoaded()) {
+        if(countryData.isCountriesDataNotLoaded()) {
             log.warn("[CountryManager:refreshCountriesDataIfMissing] Countries data is not loaded.");
             refreshCountriesData();
         } else {
