@@ -14,7 +14,7 @@ plugins {
 }
 
 group = "com.example"
-version = "0.4.0"
+version = "0.5.0"
 
 configurations {
 	compileOnly {
@@ -29,8 +29,12 @@ repositories {
 dependencies {
 	implementation "org.springframework.boot:spring-boot-starter"
 	implementation "org.springframework.boot:spring-boot-starter-actuator"
+	implementation "org.springframework.boot:spring-boot-starter-web"
+	implementation "com.graphql-java-kickstart:graphql-webclient-spring-boot-starter:$graphQlClientVersion"
+
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
 	testImplementation "org.springframework.boot:spring-boot-starter-test"
 }
 
