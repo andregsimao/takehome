@@ -1,6 +1,5 @@
 package com.example.takehome.configuration;
 
-import com.github.benmanes.caffeine.cache.CacheLoader;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import jakarta.servlet.*;
@@ -15,7 +14,8 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class RequestThrottleFilter implements Filter {
 
-    private final int MAX_REQUESTS_PER_SECOND = 5;
+    private final int MAX_REQUESTS_PER_SECOND_UNAUTHENTICATED = 5;
+    private final int MAX_REQUESTS_PER_SECOND_AUTHENTICATED = 20;
 
     private LoadingCache<String, Integer> requestCountsPerIpAddress;
 
@@ -35,7 +35,8 @@ public class RequestThrottleFilter implements Filter {
             throws IOException, ServletException {
         HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
         String clientIpAddress = getClientIP((HttpServletRequest) servletRequest);
-        if(isMaximumRequestsPerSecondExceeded(clientIpAddress)){
+        boolean isAuthenticated = ((HttpServletRequest) servletRequest).getAuthType() != null;
+        if(isMaximumRequestsPerSecondExceeded(isAuthenticated, clientIpAddress)){
             httpServletResponse.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
             httpServletResponse.getWriter().write("Too many requests");
             return;
@@ -43,16 +44,16 @@ public class RequestThrottleFilter implements Filter {
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
-    private boolean isMaximumRequestsPerSecondExceeded(String clientIpAddress){
+    private boolean isMaximumRequestsPerSecondExceeded(boolean isAuthenticated, String clientIpAddress){
         Integer requests = requestCountsPerIpAddress.get(clientIpAddress);
-        if(requests != null){
-            if(requests > MAX_REQUESTS_PER_SECOND) {
-                requestCountsPerIpAddress.asMap().remove(clientIpAddress);
-                requestCountsPerIpAddress.put(clientIpAddress, requests);
-                return true;
-            }
-        } else {
+        int maxRequestsPerSecound = isAuthenticated ?
+            MAX_REQUESTS_PER_SECOND_AUTHENTICATED : MAX_REQUESTS_PER_SECOND_UNAUTHENTICATED;
+        if(requests == null) {
             requests = 0;
+        } else if (requests > maxRequestsPerSecound) {
+            requestCountsPerIpAddress.asMap().remove(clientIpAddress);
+            requestCountsPerIpAddress.put(clientIpAddress, requests);
+            return true;
         }
         requests++;
         requestCountsPerIpAddress.put(clientIpAddress, requests);
