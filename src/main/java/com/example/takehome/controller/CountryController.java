@@ -52,7 +52,7 @@ public class CountryController {
             log.error("[CountryController:getCountriesInSameContinent] Bad request in getting output countries: " + errorResponse);
             HttpStatus httpStatus = getHttpStatusFromException(e.getErrorType());
             return new ResponseEntity<>(errorResponse, httpStatus);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             CountriesResponse errorResponse = CountriesResponse
                     .buildCountriesErrorResponse(inputCountries, e.getMessage());
             log.error("[CountryController:getCountriesInSameContinent] Internal Server Error in getting output countries: " + errorResponse);
