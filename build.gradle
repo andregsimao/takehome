@@ -33,6 +33,10 @@ dependencies {
 	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:$springDocVersion"
 	implementation "jakarta.ws.rs:jakarta.ws.rs-api:$jakartaWsVersion"
 	implementation "com.graphql-java-kickstart:graphql-webclient-spring-boot-starter:$graphQlClientVersion"
+	implementation('com.github.ben-manes.caffeine:caffeine') {
+		exclude group: 'logback-classic', module: 'ch.qos.logback'
+		exclude group: 'log4j-over-slf4j', module: 'org.slf4j'
+	}
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
