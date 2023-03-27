@@ -1,9 +1,9 @@
 package com.example.takehome.manager;
 
-import com.example.takehome.enums.Continent;
+import com.example.takehome.enums.ContinentEnum;
 import com.example.takehome.exception.ApplicationException;
 import com.example.takehome.exception.ErrorType;
-import com.example.takehome.model.CountryCodeAndName;
+import com.example.takehome.model.Country;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ import java.util.*;
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class CountryData {
 
-    private Map<String, List<CountryCodeAndName>> mapCountriesFromContinent = new HashMap<>();
+    private Map<String, List<Country>> mapCountriesFromContinent = new HashMap<>();
     private Map<String, String> mapContinentFromCountryCode = new HashMap<>();
     private Map<String, String> mapCodeFromCountryName = new HashMap<>();
 
@@ -29,13 +29,13 @@ public class CountryData {
         return continentsSet;
     }
 
-    public List<CountryCodeAndName> getCountriesInSameContinents(
+    public List<Country> getCountriesInSameContinents(
         Set<String> continentsCodes,
         Set<String> countriesCode
     ) {
-        List<CountryCodeAndName> countriesInSameContinent = new ArrayList<>();
+        List<Country> countriesInSameContinent = new ArrayList<>();
         for(String continentCode: continentsCodes) {
-            List<CountryCodeAndName> countriesFromContinent = mapCountriesFromContinent.get(continentCode);
+            List<Country> countriesFromContinent = mapCountriesFromContinent.get(continentCode);
             addCountries(countriesInSameContinent, countriesCode, countriesFromContinent);
         }
         return countriesInSameContinent;
@@ -56,10 +56,10 @@ public class CountryData {
         return mapCodeFromCountryName.get(countryName);
     }
 
-    public void setCountriesData(Map<Continent, List<CountryCodeAndName>> countriesInContinent) {
+    public void setCountriesData(Map<ContinentEnum, List<Country>> countriesInContinent) {
         isUpdatingData = true;
         resetCountriesData();
-        for(Map.Entry<Continent, List<CountryCodeAndName>> entrySet: countriesInContinent.entrySet()) {
+        for(Map.Entry<ContinentEnum, List<Country>> entrySet: countriesInContinent.entrySet()) {
             setCountriesInContinent(entrySet.getKey(), entrySet.getValue());
         }
         isUpdatingData = false;
@@ -78,21 +78,21 @@ public class CountryData {
         mapCodeFromCountryName.clear();
     }
 
-    private void setCountriesInContinent(Continent continent, List<CountryCodeAndName> countryCodeAndNameList) {
-        mapCountriesFromContinent.put(continent.name(), countryCodeAndNameList);
-        for(CountryCodeAndName contryCodeAndName: countryCodeAndNameList) {
+    private void setCountriesInContinent(ContinentEnum continentEnum, List<Country> countryList) {
+        mapCountriesFromContinent.put(continentEnum.name(), countryList);
+        for(Country contryCodeAndName: countryList) {
             String countryCode = contryCodeAndName.getCode().toUpperCase();
             String countryName = contryCodeAndName.getName().toUpperCase();
-            mapContinentFromCountryCode.put(countryCode, continent.name());
+            mapContinentFromCountryCode.put(countryCode, continentEnum.name());
             mapCodeFromCountryName.put(countryName, countryCode);
         }
     }
 
-    private void addCountries(List<CountryCodeAndName> countriesInSameContinent, Set<String> countriesFromInput, List<CountryCodeAndName> countriesToAdd) {
-        for(CountryCodeAndName countryCodeAndName: countriesToAdd) {
-            boolean isCountryFromInput = countriesFromInput.contains(countryCodeAndName.getCode());
+    private void addCountries(List<Country> countriesInSameContinent, Set<String> countriesFromInput, List<Country> countriesToAdd) {
+        for(Country country : countriesToAdd) {
+            boolean isCountryFromInput = countriesFromInput.contains(country.getCode());
             if(!isCountryFromInput) {
-                countriesInSameContinent.add(countryCodeAndName);
+                countriesInSameContinent.add(country);
             }
         }
     }

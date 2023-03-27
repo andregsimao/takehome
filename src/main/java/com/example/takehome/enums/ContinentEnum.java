@@ -1,6 +1,6 @@
 package com.example.takehome.enums;
 
-public enum Continent {
+public enum ContinentEnum {
 
     AF("Africa"),
     AN("Antarctica"),
@@ -12,7 +12,7 @@ public enum Continent {
 
     final String fullName;
 
-    Continent(String fullName) {
+    ContinentEnum(String fullName) {
         this.fullName = fullName;
     }
 

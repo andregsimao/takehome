@@ -1,7 +1,7 @@
 package com.example.takehome.manager;
 
-import com.example.takehome.enums.Continent;
-import com.example.takehome.model.CountryCodeAndName;
+import com.example.takehome.enums.ContinentEnum;
+import com.example.takehome.model.Country;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import graphql.kickstart.spring.webclient.boot.GraphQLRequest;
 import graphql.kickstart.spring.webclient.boot.GraphQLWebClient;
@@ -37,10 +37,10 @@ public class CountryManager {
     public void refreshCountriesData() {
         log.info("[CountryManager:refreshCountriesData] Refreshing countries data from Trevorblades API.");
         try {
-            Map<Continent, List<CountryCodeAndName>> countriesInContinents = new HashMap<>();
-            for(Continent continent: Continent.values()) {
-                List<CountryCodeAndName> countriesInContinent = requestCountriesInContinent(continent);
-                countriesInContinents.put(continent, countriesInContinent);
+            Map<ContinentEnum, List<Country>> countriesInContinents = new HashMap<>();
+            for(ContinentEnum continentEnum : ContinentEnum.values()) {
+                List<Country> countriesInContinent = requestCountriesInContinent(continentEnum);
+                countriesInContinents.put(continentEnum, countriesInContinent);
             }
             countryData.setCountriesData(countriesInContinents);
         } catch (Exception e) {
@@ -59,19 +59,19 @@ public class CountryManager {
         }
     }
 
-    private List<CountryCodeAndName> requestCountriesInContinent(Continent continent) {
+    private List<Country> requestCountriesInContinent(ContinentEnum continentEnum) {
         ObjectMapper objectMapper = new ObjectMapper();
         WebClient webClient = WebClient.builder()
             .baseUrl(graphqlClientUrl).build();
         GraphQLWebClient graphqlClient = GraphQLWebClient.newInstance(webClient, objectMapper);
-        String queryCountriesInContinent = getQueryCountriesInContinent(continent);
+        String queryCountriesInContinent = getQueryCountriesInContinent(continentEnum);
         var response = graphqlClient.post(GraphQLRequest.builder()
             .query(queryCountriesInContinent).build()).block();
 
-        return response.getFirstList(CountryCodeAndName.class);
+        return response.getFirstList(Country.class);
     }
 
-    private String getQueryCountriesInContinent(Continent continent) {
-        return "query { countries(filter: { continent: { eq: \"" + continent.name() + "\"} }) { code, name } }";
+    private String getQueryCountriesInContinent(ContinentEnum continentEnum) {
+        return "query { countries(filter: { continent: { eq: \"" + continentEnum.name() + "\"} }) { code, name, continent {code, name} } }";
     }
 }

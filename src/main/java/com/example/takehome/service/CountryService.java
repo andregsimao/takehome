@@ -3,7 +3,7 @@ package com.example.takehome.service;
 import com.example.takehome.exception.ApplicationException;
 import com.example.takehome.exception.ErrorType;
 import com.example.takehome.manager.CountryData;
-import com.example.takehome.model.CountryCodeAndName;
+import com.example.takehome.model.Country;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,11 +23,19 @@ public class CountryService {
         this.countryData = countryData;
     }
 
-    public List<CountryCodeAndName> getCountriesInSameContinent(List<String> inputCountries) throws ApplicationException {
+    public List<Country> getCountriesInSameContinent(List<String> inputCountries) throws ApplicationException {
+        checkForEmptyInput(inputCountries);
         countryData.checkIfCountriesDataIsLoaded();
         Set<String> countriesCode = getCountriesCode(inputCountries);
         Set<String> continentsCodes = countryData.getContinentsInCountries(countriesCode);
         return countryData.getCountriesInSameContinents(continentsCodes, countriesCode);
+    }
+
+    private void checkForEmptyInput(List<String> countries) throws ApplicationException {
+        if(countries.isEmpty()) {
+            String exceptionMessage = "Invalid input data";
+            throw new ApplicationException(ErrorType.INVALID_COUNTRY_INPUT, exceptionMessage);
+        }
     }
 
     private Set<String> getCountriesCode(List<String> inputCountries) throws ApplicationException {
