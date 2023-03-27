@@ -86,6 +86,10 @@ The pre-processing part does not guarantee that the response is always up-to-dat
 For reducing the possibility of outdated data, this API could reduce the refresh time of the pre-processing step or adding a manual refreshing feature. 
 The refresh was configured to be performed each 15 days.
 
+# Suppositions
+After reading the requirements, I supposed that not only authenticated users, but also unauthenticated users could access the API, 
+so I did not block any user from access the endpoint created.
+
 # Build & Run 
 
 ## run spring-boot application

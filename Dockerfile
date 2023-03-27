@@ -27,4 +27,4 @@ COPY --from=builder /app/build/libs/*.jar /deployments/
 
 EXPOSE 8080
 
-ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS} -jar takehome-1.0.0.jar"]
+ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS} -jar takehome-2.0.0.jar"]
