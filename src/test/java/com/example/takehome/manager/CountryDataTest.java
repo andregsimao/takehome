@@ -2,6 +2,7 @@ package com.example.takehome.manager;
 
 import com.example.takehome.enums.ContinentEnum;
 import com.example.takehome.exception.ApplicationException;
+import com.example.takehome.exception.ErrorType;
 import com.example.takehome.model.Continent;
 import com.example.takehome.model.Country;
 import org.junit.jupiter.api.Assertions;
@@ -59,6 +60,7 @@ public class CountryDataTest {
         ApplicationException exception = Assertions.assertThrows(ApplicationException.class, () -> countryData.checkIfCountriesDataIsLoaded());
 
         Assertions.assertEquals(expectedMessage, exception.getMessage());
+        Assertions.assertEquals(ErrorType.COUNTRY_DATA_NOT_LOADED, exception.getErrorType());
     }
 
     @Test
