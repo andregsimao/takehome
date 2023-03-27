@@ -10,6 +10,9 @@ This API utilizes [Trevorblades endpoint](https://countries.trevorblades.com/gra
 
 # Example
 
+## [Swagger](http://localhost:8080/swagger-ui/index.html) 
+
+
 ## Finding the countries in the same continent that the countries WF (Wallis and Futuna) and BV (Bouvet Island)
 
 ### POST request to localhost:8080/api/countries/same-continent
