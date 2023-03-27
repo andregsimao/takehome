@@ -5,13 +5,14 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-
+@Slf4j
 @Component
 public class RequestThrottleFilter implements Filter {
 
@@ -38,7 +39,12 @@ public class RequestThrottleFilter implements Filter {
         String clientIpAddress = getClientIP((HttpServletRequest) servletRequest);
         String authorizationHeader = ((HttpServletRequest) servletRequest).getHeader(HttpHeaders.AUTHORIZATION);
         boolean isNotAuthenticated = authorizationHeader == null || authorizationHeader.isBlank();
-        if(isMaximumRequestsPerSecondExceeded(isNotAuthenticated, clientIpAddress)){
+        String requestURI = ((HttpServletRequest) servletRequest).getRequestURI();
+        if(isMaximumRequestsPerSecondExceeded(requestURI, isNotAuthenticated, clientIpAddress)){
+            log.error(
+                "Too many requests for user " + clientIpAddress + ". isNotAuthenticated: "+
+                    isNotAuthenticated + ". URI: " + requestURI
+            );
             httpServletResponse.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
             httpServletResponse.getWriter().write("Too many requests");
             return;
@@ -46,7 +52,10 @@ public class RequestThrottleFilter implements Filter {
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
-    private boolean isMaximumRequestsPerSecondExceeded(boolean isNotAuthenticated, String clientIpAddress){
+    private boolean isMaximumRequestsPerSecondExceeded(String requestURI, boolean isNotAuthenticated, String clientIpAddress){
+        if(requestURI == null || !requestURI.contains("/api/countries")) {
+            return false;
+        }
         Integer requests = requestCountsPerIpAddress.get(clientIpAddress);
         int maxRequestsPerSecound = isNotAuthenticated ?
                 MAX_REQUESTS_PER_SECOND_UNAUTHENTICATED : MAX_REQUESTS_PER_SECOND_AUTHENTICATED;
