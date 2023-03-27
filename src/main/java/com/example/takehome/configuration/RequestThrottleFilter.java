@@ -5,6 +5,7 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import java.io.IOException;
@@ -22,7 +23,7 @@ public class RequestThrottleFilter implements Filter {
     public RequestThrottleFilter(){
         super();
         requestCountsPerIpAddress = Caffeine.newBuilder().
-            expireAfterWrite(1, TimeUnit.SECONDS).build(key -> 0);
+                expireAfterWrite(1, TimeUnit.SECONDS).build(key -> 0);
     }
 
     @Override
@@ -35,8 +36,9 @@ public class RequestThrottleFilter implements Filter {
             throws IOException, ServletException {
         HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
         String clientIpAddress = getClientIP((HttpServletRequest) servletRequest);
-        boolean isAuthenticated = ((HttpServletRequest) servletRequest).getAuthType() != null;
-        if(isMaximumRequestsPerSecondExceeded(isAuthenticated, clientIpAddress)){
+        String authorizationHeader = ((HttpServletRequest) servletRequest).getHeader(HttpHeaders.AUTHORIZATION);
+        boolean isNotAuthenticated = authorizationHeader == null || authorizationHeader.isBlank();
+        if(isMaximumRequestsPerSecondExceeded(isNotAuthenticated, clientIpAddress)){
             httpServletResponse.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
             httpServletResponse.getWriter().write("Too many requests");
             return;
@@ -44,10 +46,10 @@ public class RequestThrottleFilter implements Filter {
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
-    private boolean isMaximumRequestsPerSecondExceeded(boolean isAuthenticated, String clientIpAddress){
+    private boolean isMaximumRequestsPerSecondExceeded(boolean isNotAuthenticated, String clientIpAddress){
         Integer requests = requestCountsPerIpAddress.get(clientIpAddress);
-        int maxRequestsPerSecound = isAuthenticated ?
-            MAX_REQUESTS_PER_SECOND_AUTHENTICATED : MAX_REQUESTS_PER_SECOND_UNAUTHENTICATED;
+        int maxRequestsPerSecound = isNotAuthenticated ?
+                MAX_REQUESTS_PER_SECOND_UNAUTHENTICATED : MAX_REQUESTS_PER_SECOND_AUTHENTICATED;
         if(requests == null) {
             requests = 0;
         } else if (requests > maxRequestsPerSecound) {
