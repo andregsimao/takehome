@@ -3,6 +3,7 @@ package com.example.takehome.controller;
 import com.example.takehome.exception.ApplicationException;
 import com.example.takehome.exception.ErrorType;
 import com.example.takehome.model.CountriesResponse;
+import com.example.takehome.model.CountryCodeAndName;
 import com.example.takehome.service.CountryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class CountryController {
     public ResponseEntity<CountriesResponse> getCountriesInSameContinent(@RequestBody List<String> inputCountries) {
         try {
             log.info("[CountryController:getCountriesInSameContinent] Receiving request for input countries: " + inputCountries);
-            Set<String> countriesInSameContinent = countryService.getCountriesInSameContinent(inputCountries);
+            List<CountryCodeAndName> countriesInSameContinent = countryService.getCountriesInSameContinent(inputCountries);
             CountriesResponse countriesInSameContinentResponse = CountriesResponse
                 .buildCountriesListResponse(inputCountries, countriesInSameContinent);
             log.info("[CountryController:getCountriesInSameContinent] Success in getting output countries: " + countriesInSameContinentResponse);

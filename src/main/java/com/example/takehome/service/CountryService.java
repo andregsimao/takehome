@@ -3,6 +3,7 @@ package com.example.takehome.service;
 import com.example.takehome.exception.ApplicationException;
 import com.example.takehome.exception.ErrorType;
 import com.example.takehome.manager.CountryData;
+import com.example.takehome.model.CountryCodeAndName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,14 +14,14 @@ import java.util.Set;
 @Service
 public class CountryService {
 
-    CountryData countryData;
+    private CountryData countryData;
 
     @Autowired
     public CountryService(CountryData countryData) {
         this.countryData = countryData;
     }
 
-    public Set<String> getCountriesInSameContinent(List<String> inputCountries) throws ApplicationException {
+    public List<CountryCodeAndName> getCountriesInSameContinent(List<String> inputCountries) throws ApplicationException {
         countryData.checkIfCountriesDataIsLoaded();
         Set<String> countriesCode = getCountriesCode(inputCountries);
         Set<String> continentsCodes = countryData.getContinentsInCountries(countriesCode);

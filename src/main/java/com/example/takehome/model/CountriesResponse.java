@@ -1,20 +1,18 @@
 package com.example.takehome.model;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class CountriesResponse {
     private String message;
 
     private List<String> countriesInput = new ArrayList<>();
 
-    private Set<String> countriesOutput = new HashSet<>();
+    private List<CountryCodeAndName> countriesOutput = new ArrayList<>();
 
     private CountriesResponse() { }
 
-    public static CountriesResponse buildCountriesListResponse(List<String> countriesInput, Set<String> countriesOutput) {
+    public static CountriesResponse buildCountriesListResponse(List<String> countriesInput, List<CountryCodeAndName> countriesOutput) {
         String inputConcatenated = String.join(",", countriesInput);
         CountriesResponse response = new CountriesResponse();
         response.countriesInput = countriesInput;
@@ -37,7 +35,7 @@ public class CountriesResponse {
         return countriesInput;
     }
 
-    public Set<String> getCountriesOutput() {
+    public List<CountryCodeAndName> getCountriesOutput() {
         return countriesOutput;
     }
 
@@ -48,12 +46,11 @@ public class CountriesResponse {
     @Override
     public String toString() {
         String inputConcatenated = String.join(",", countriesInput);
-        String outputConcatenated = String.join(",", countriesOutput);
+        String outputConcatenated = String.join(",", countriesOutput.toString());
 
         return "CountriesResponse(" +
             "message=" + message + ", " +
             "countriesInput=" + inputConcatenated + ", " +
-            "countriesOutput=" + outputConcatenated + " " +
-            ")";
+            "countriesOutput=" + outputConcatenated + ")";
     }
 }
