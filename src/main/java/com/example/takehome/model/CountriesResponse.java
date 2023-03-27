@@ -8,12 +8,12 @@ public class CountriesResponse {
 
     private List<String> countriesInput = new ArrayList<>();
 
-    private List<CountryCodeAndName> countriesOutput = new ArrayList<>();
+    private List<Country> countriesOutput = new ArrayList<>();
 
     private CountriesResponse() { }
 
-    public static CountriesResponse buildCountriesListResponse(List<String> countriesInput, List<CountryCodeAndName> countriesOutput) {
-        String inputConcatenated = String.join(",", countriesInput);
+    public static CountriesResponse buildCountriesListResponse(List<String> countriesInput, List<Country> countriesOutput) {
+        String inputConcatenated = String.join(", ", countriesInput);
         CountriesResponse response = new CountriesResponse();
         response.countriesInput = countriesInput;
         response.countriesOutput = countriesOutput;
@@ -23,7 +23,7 @@ public class CountriesResponse {
     }
 
     public static CountriesResponse buildCountriesErrorResponse(List<String> countriesInput, String errorMessage) {
-        String inputConcatenated = String.join(",", countriesInput);
+        String inputConcatenated = String.join(", ", countriesInput);
         CountriesResponse response = new CountriesResponse();
         response.countriesInput = countriesInput;
         response.message = "Error to get the countries in the same continent as the input countries " +
@@ -35,7 +35,7 @@ public class CountriesResponse {
         return countriesInput;
     }
 
-    public List<CountryCodeAndName> getCountriesOutput() {
+    public List<Country> getCountriesOutput() {
         return countriesOutput;
     }
 

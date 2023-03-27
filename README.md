@@ -8,38 +8,71 @@ This API utilizes [Trevorblades endpoint](https://countries.trevorblades.com/gra
 * [Spring Boot 3.0.4](https://start.spring.io/)
 * [JDK 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 
-# Example
+# Endpoint to find countries in the same continent that the given countries
 
-## Finding the countries in the same continent that the countries WF (Wallis and Futuna) and BV (Bouvet Island)
+## [Swagger](http://localhost:8080/swagger-ui/index.html) 
+
+## Example: Input countries -> BV (Bouvet Island) and TF (French Southern Territories)
 
 ### POST request to localhost:8080/api/countries/same-continent
 
 ### Input
 The codes or names of the countries (case-insensitive).
-As an example, a possible input is WF (Wallis and Futuna) and BV (Bouvet Island)
+As an example, a possible input is BV (Bouvet Island) and TF (French Southern Territories)
 
 ```json
 {
-  "codes": ["BV", "WF"] 
+  "countries": ["BV", "TF"] 
 }
 ```
 
-Alternatively, the input can be also the name of the countries (case-insensitive):
+Alternatively, the input can be also the name of the countries or a mix of names and country codes (case-insensitive):
 
 ```json
 {
-  "codes": ["Wallis and Futuna", "Bouvet Island"] 
+  "countries": ["bouvet island", "French southern territories", "bV"] 
 }
 ```
 
 ### Output
 The codes of the countries in the same continent of the input countries. 
-As WF (Wallis and Futuna) is in Oceania and BV (Bouvet Island) is in Antarctica the result will be all the countries 
-in these two continents except for the input countries.
+As BV (Bouvet Island) and TF (French southern territories) are in Antarctica the result will be all the countries 
+in this continent except for the input countries.
 
 ```json
 {
-  "same-continent-countries": ["AS", "AU", "CK", "FJ", "FM", "GU", "KI", "MH", "MP", "NC", "NF", "NR", "NU", "NZ", "PF", "PG", "PN", "PW", "SB", "TK", "TL", "TO", "TV", "UM", "VU", "WS", "AQ", "GS", "HM", "TF"]
+  "message": "There are 3 countries in the same continents as the input countries bouvet island,French southern territories,bV",
+  "countriesInput": [
+    "bouvet island",
+    "French southern territories",
+    "bV"
+  ],
+  "countriesOutput": [
+    {
+      "code": "AQ",
+      "name": "Antarctica",
+      "continent": {
+        "code": "AN",
+        "name": "Antarctica"
+      }
+    },
+    {
+      "code": "GS",
+      "name": "South Georgia and the South Sandwich Islands",
+      "continent": {
+        "code": "AN",
+        "name": "Antarctica"
+      }
+    },
+    {
+      "code": "HM",
+      "name": "Heard Island and McDonald Islands",
+      "continent": {
+        "code": "AN",
+        "name": "Antarctica"
+      }
+    }
+  ]
 }
 ```
 
