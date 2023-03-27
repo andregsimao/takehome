@@ -79,61 +79,40 @@ public class CountryDataTest {
     }
 
     private Map<ContinentEnum, List<Country>> getCountryDataMapStub() {
-        ContinentEnum continentEnum1 = ContinentEnum.OC;
-        Continent continent1 = new Continent();
-        continent1.setCode(continentEnum1.name());
-        continent1.setName(continentEnum1.getFullName());
-
-        List<Country> countries1 = new ArrayList<>();
-
-        Country country1 = new Country();
-        country1.setContinent(continent1);
-        country1.setCode("COUNT1");
-        country1.setName("COUNTRY 1");
-        countries1.add(country1);
-
-        Country country2 = new Country();
-        country2.setContinent(continent1);
-        country2.setCode("COUNT2");
-        country2.setName("COUNTRY 2");
-        countries1.add(country2);
-
-        ContinentEnum continentEnum2 = ContinentEnum.AF;
-        Continent continent2 = new Continent();
-        continent2.setCode(continentEnum2.name());
-        continent2.setName(continentEnum2.getFullName());
-
-        List<Country> countries2 = new ArrayList<>();
-
-        Country country3 = new Country();
-        country3.setContinent(continent2);
-        country3.setCode("COUNT3");
-        country3.setName("COUNTRY 3");
-        countries2.add(country3);
-
-        Country country4 = new Country();
-        country4.setContinent(continent2);
-        country4.setCode("COUNT4");
-        country4.setName("COUNTRY 4");
-        countries2.add(country4);
-
-        ContinentEnum continentEnum3 = ContinentEnum.AN;
-        Continent continent3 = new Continent();
-        continent3.setCode(continentEnum3.name());
-        continent3.setName(continentEnum3.getFullName());
-
-        List<Country> countries3 = new ArrayList<>();
-
-        Country country5 = new Country();
-        country5.setContinent(continent3);
-        country5.setCode("COUNT5");
-        country5.setName("COUNTRY 5");
-        countries3.add(country5);
-
         Map<ContinentEnum, List<Country>> mapCountriesInContinents = new HashMap<>();
-        mapCountriesInContinents.put(continentEnum1, countries1);
-        mapCountriesInContinents.put(continentEnum2, countries2);
-        mapCountriesInContinents.put(continentEnum3, countries3);
+        String[] countryCodes1 = new String[]{"COUNT1", "COUNT2"};
+        String[] countryCodes2 = new String[]{"COUNT3", "COUNT4"};
+        String[] countryCodes3 = new String[]{"COUNT5"};
+
+        String[] countryNames1 = new String[]{"COUNTRY 1", "COUNTRY 2"};
+        String[] countryNames2 = new String[]{"COUNTRY 3", "COUNTRY 4"};
+        String[] countryNames3 = new String[]{"COUNTRY 5"};
+
+        addCountriesToContinent(mapCountriesInContinents, ContinentEnum.OC, countryCodes1, countryNames1);
+        addCountriesToContinent(mapCountriesInContinents, ContinentEnum.AF, countryCodes2, countryNames2);
+        addCountriesToContinent(mapCountriesInContinents, ContinentEnum.AN, countryCodes3, countryNames3);
+
         return mapCountriesInContinents;
+    }
+
+    private void addCountriesToContinent(
+        Map<ContinentEnum, List<Country>> mapCountriesInContinents,
+        ContinentEnum continentEnum,
+        String[] countryCodes,
+        String[] countryNames
+    ) {
+        Continent continent = new Continent();
+        continent.setCode(continentEnum.name());
+        continent.setName(continentEnum.getFullName());
+
+        List<Country> countries = new ArrayList<>();
+        for(int i = 0; i < countryCodes.length ; i ++) {
+            Country country = new Country();
+            country.setContinent(continent);
+            country.setCode(countryCodes[i]);
+            country.setName(countryNames[i]);
+            countries.add(country);
+        }
+        mapCountriesInContinents.put(continentEnum, countries);
     }
 }
