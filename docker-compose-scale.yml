@@ -1,0 +1,13 @@
+version: '2'
+services:
+  takehome-server:
+    build:
+      dockerfile: Dockerfile
+    image: takehome:latest
+    ports:
+      - 8080
+    networks:
+      - spring-cloud-network
+networks:
+  spring-cloud-network:
+    driver: bridge
