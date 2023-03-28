@@ -108,12 +108,13 @@ java -jar build/libs/takehome-{version}.jar
 ./gradlew test
 ```
 
-## build OCI image  
+## to build OCI image and running it as a container, simply use docker-compose:
 ```bash
-docker build --no-cache=true -t takehome .
+docker-compose up --build
 ```
 
-## run the image inside as a container
+## Alternatively, to build OCI image and run the image inside as a container  
 ```bash
+docker build -t takehome .
 docker run -d -p 8080:8080 takehome
 ```
