@@ -87,8 +87,9 @@ For reducing the possibility of outdated data, this API could reduce the refresh
 The refresh was configured to be performed each 15 days.
 
 # Suppositions
-After reading the requirements, I supposed that not only authenticated users, but also unauthenticated users could access the API, 
-so I did not block any user from access the endpoint created.
+This API allows both authenticated and unauthenticated users to access, but it limits the number of requests per minute differently for them.  
+As unauthenticated can access the API, it does not block any user trying to access it.
+Also, if the continents code comes to change, this API would need a modification in the enum related to them.
 
 # Build & Run 
 
