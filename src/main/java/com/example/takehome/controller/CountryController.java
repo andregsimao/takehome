@@ -21,7 +21,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api")
+@RequestMapping("${takehome.mapping.api.signature}")
 public class CountryController {
 
     CountryService countryService;
@@ -32,7 +32,7 @@ public class CountryController {
     }
 
     @PostMapping(
-        value = "/countries/same-continent",
+        value = "countries/same-continent",
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE
     )
