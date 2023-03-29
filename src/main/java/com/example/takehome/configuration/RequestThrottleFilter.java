@@ -6,6 +6,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -16,10 +17,16 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class RequestThrottleFilter implements Filter {
 
-    private final int MAX_REQUESTS_PER_SECOND_UNAUTHENTICATED = 5;
-    private final int MAX_REQUESTS_PER_SECOND_AUTHENTICATED = 20;
+    @Value("${takehome.unauthenticated.max.requests.per.second}")
+    private final int maxUnauthenticatedRequestsPerSecond = 5;
 
-    private LoadingCache<String, Integer> requestCountsPerIpAddress;
+    @Value("${takehome.authenticated.max.requests.per.second}")
+    private final int maxAuthenticatedRequestsPerSecond = 20;
+
+    @Value("${takehome.mapping.api.signature}")
+    private final String takehomeApiSignature = "takehome";
+
+    private final LoadingCache<String, Integer> requestCountsPerIpAddress;
 
     public RequestThrottleFilter(){
         super();
@@ -53,12 +60,12 @@ public class RequestThrottleFilter implements Filter {
     }
 
     private boolean isMaximumRequestsPerSecondExceeded(String requestURI, boolean isNotAuthenticated, String clientIpAddress){
-        if(requestURI == null || !requestURI.contains("/api/countries")) {
+        if(requestURI == null || !requestURI.contains(takehomeApiSignature)) {
             return false;
         }
         Integer requests = requestCountsPerIpAddress.get(clientIpAddress);
         int maxRequestsPerSecound = isNotAuthenticated ?
-            MAX_REQUESTS_PER_SECOND_UNAUTHENTICATED : MAX_REQUESTS_PER_SECOND_AUTHENTICATED;
+                maxUnauthenticatedRequestsPerSecond : maxAuthenticatedRequestsPerSecond;
         if(requests == null) {
             requests = 0;
         } else if (requests > maxRequestsPerSecound) {
