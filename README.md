@@ -14,7 +14,7 @@ This API utilizes [Trevorblades endpoint](https://countries.trevorblades.com/gra
 
 ## Example: Input countries -> BV (Bouvet Island) and TF (French Southern Territories)
 
-### POST request to localhost:8080/api/countries/same-continent
+### POST request to localhost:8080/takehome/countries/same-continent
 
 ### Input
 The codes or names of the countries (case-insensitive).
