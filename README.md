@@ -88,7 +88,7 @@ The refresh was configured to be performed each 15 days.
 
 # Suppositions
 This API allows both authenticated and unauthenticated users to access, but it limits the number of requests per minute differently for them.  
-As unauthenticated can access the API, it does not block any user trying to access it.
+As unauthenticated users can access the API, it does not block any user trying to access it.
 Also, if the continents code comes to change, this API would need a modification in the enum related to them.
 
 # Build & Run 
